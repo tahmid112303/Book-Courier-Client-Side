@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate } from 'react-router'
 import Logo from '../Logo/Logo'
 import useAuth from '../../Hooks/useAuth'
 import Swal from 'sweetalert2'
+import { LogOut } from 'lucide-react'
 
 const NavBar = () => {
 
@@ -67,8 +68,8 @@ const NavBar = () => {
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
           <img
-            alt="Tailwind CSS Navbar component"
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+            alt="Profile Image"
+            src={user?.photoURL} />
         </div>
       </div>
       <ul
@@ -79,8 +80,11 @@ const NavBar = () => {
             Profile
           </Link>
         </li>
-        <li><a>Settings</a></li>
-        <li onClick={handleLogOut}><a>Logout</a></li>
+        <li onClick={handleLogOut}>
+            <a>
+              <span>Log Out</span> <LogOut></LogOut>
+            </a>
+        </li>
       </ul>
     </div> : <button onClick={() => navigate('/login')} className="btn btn-primary rounded-2xl">Sign In</button> }
 

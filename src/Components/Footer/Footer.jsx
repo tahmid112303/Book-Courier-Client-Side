@@ -6,7 +6,8 @@ const Footer = () => {
     <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10 mt-10 rounded-2xl mb-4">
   <aside>
         <Logo></Logo>
-    <p>
+
+      <p>
       ACME Industries Ltd.
       <br />
       Providing reliable tech since 1992

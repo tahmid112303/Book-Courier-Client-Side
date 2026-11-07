@@ -5,11 +5,14 @@ import { Link, useNavigate } from 'react-router';
 import useAuth from '../../Hooks/useAuth';
 import Swal from 'sweetalert2';
 import { updateProfile } from 'firebase/auth';
+import axios from 'axios';
+import useAxiosSecure from '../../Axios/useAxiosSecure';
 
 const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const {createAccount,googleSignUp} = useAuth()
-    const navigate = useNavigate()
+    const {createAccount,googleSignUp} = useAuth();
+    const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
 
     const handleGoogleSignUp = () => {
       googleSignUp()
@@ -31,38 +34,63 @@ const Register = () => {
     const handleRegister = (e) => {
         e.preventDefault()
         const name = e.target.name.value;
-        const image = e.target.image.value;
+        const image = e.target.image.files[0];
         const email = e.target.email.value;
         const password = e.target.password.value;
+
 
         createAccount(email,password)
         .then(result => {
           console.log(result.user);
-          updateProfile(result.user, {
+
+          const formData = new FormData()
+          formData.append('image', image)
+          const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`
+
+          axios.post(image_API_URL,formData)
+          .then(res => {
+            console.log("Image", res.data.data.url)
+
+            const userData = {
+              name: name,
+              email: email,
+              photo: res.data.data.url
+            }
+
+            axiosSecure.post('/users', userData)
+            .then(res => {
+              if(res.data.insertedId){
+                  console.log("Account created in the database")
+                  Swal.fire("Account created successfully!");
+                  navigate('/login')
+              }
+            })
+
+            updateProfile(result.user, {
             displayName: name,
-            photoURL: image
+            photoURL: res.data.data.url
           }).then(()=>{
             console.log("Profile updated")
           }).catch(err => {
             console.log(err)
+          })  
           })
-          
-          Swal.fire("Account created successfully!");
-          navigate('/')
-        }).catch(err => {
+
+        })
+        .catch(err => {
           console.log(err)
         })
 
     }
 
 return (
-    <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-30 max-sm:p-4 relative overflow-hidden font-sans rounded-2xl mt-10">
+    <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-30 max-sm:p-4 relative overflow-hidden font-sans rounded-2xl mt-10 ">
       {/* Background Decorative Gradients */}
       <div className="absolute top-1/4 -left-20 w-96 h-96 bg-indigo-600/30 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-purple-600/30 rounded-full blur-3xl pointer-events-none" />
 
       {/* Main Card Container */}
-      <div className="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl p-8 shadow-2xl relative z-10">
+      <div className="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl p-8 shadow-2xl relative z-10 max-sm:z-0">
         
         {/* Header */}
         <div className="text-center mb-8">
@@ -92,21 +120,21 @@ return (
             </div>
           </div>
 
-          {/* Image Input */}
-            <div>
-            <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-              Photo (Optional)
-            </label>
-            <div className="relative">
-              <Image className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-              <input
-                type="text"
-                name='image'
-                placeholder="Your Photo Link"
-                className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-3 pl-11 pr-4 text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-              />
-            </div>
-          </div>
+{/* Image File Input */}
+<div>
+  <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
+    Profile Photo (Optional)
+  </label>
+  <div className="relative">
+    <Image className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+    <input
+      type="file"
+      name="image"
+      accept="image/*"
+      className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-2.5 pl-11 pr-4 text-slate-200 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer focus:outline-none focus:border-indigo-500 transition-colors"
+    />
+  </div>
+</div>
 
           {/* Email Input */}
           <div>

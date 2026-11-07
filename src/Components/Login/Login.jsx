@@ -53,13 +53,13 @@ const Login = () => {
     }
 
   return (
-        <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-30 relative overflow-hidden font-sans rounded-2xl mt-10">
+        <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-30 max-sm:p-1 relative overflow-hidden font-sans rounded-2xl mt-10">
       {/* Background Decorative Gradients */}
       <div className="absolute top-1/4 -left-20 w-96 h-96 bg-indigo-600/30 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-purple-600/30 rounded-full blur-3xl pointer-events-none" />
 
       {/* Main Card Container */}
-      <div className="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl p-8 shadow-2xl relative z-10">
+      <div className="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border-2 border-slate-800 rounded-2xl p-8 shadow-2xl relative z-10 max-sm:z-0">
         
         {/* Header */}
         <div className="text-center mb-8">
