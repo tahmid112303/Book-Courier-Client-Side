@@ -1,7 +1,7 @@
 import React from 'react'
-import image1 from '../../assets/image1.jpg'
-import image2 from '../../assets/image2.webp'
-import image3 from '../../assets/image3.jpg'
+import image1 from '../../assets/Image1.jpg'
+import image2 from '../../assets/Image2.png'
+import image3 from '../../assets/Image3.png'
 
 const Banner = () => {
   return (

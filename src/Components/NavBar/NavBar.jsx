@@ -14,9 +14,11 @@ const NavBar = () => {
 
       <NavLink to='/books'>Books</NavLink>
 
+      <NavLink to='/about'>About Us</NavLink>
+
       <NavLink className='max-sm:hidden' to='/coverage'>Coverage Areas</NavLink>
 
-      <NavLink>Dashboard</NavLink>
+      <NavLink to='/dashboard'>Dashboard</NavLink>
 
       {!user && <>
           <NavLink to='/register'>Register</NavLink>

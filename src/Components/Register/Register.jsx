@@ -10,7 +10,8 @@ import useAxiosSecure from '../../Axios/useAxiosSecure';
 
 const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const {createAccount,googleSignUp} = useAuth();
+    const {createAccount,googleSignUp,logOut} = useAuth();
+    const [firebaseError,setFirebaseError] = useState('')
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
 
@@ -28,6 +29,7 @@ const Register = () => {
           navigate('/');
       }).catch(err => {
         console.log(err)
+        setFirebaseError(err.message)
       })
     }
 
@@ -63,6 +65,12 @@ const Register = () => {
                   console.log("Account created in the database")
                   Swal.fire("Account created successfully!");
                   navigate('/login')
+                  logOut()
+                  .then(()=>{
+                    console.log('Sign In Now')
+                  }).catch(err=>{
+                    console.log(err)
+                  })
               }
             })
 
@@ -79,12 +87,13 @@ const Register = () => {
         })
         .catch(err => {
           console.log(err)
+          setFirebaseError(err.message)
         })
 
     }
 
 return (
-    <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-30 max-sm:p-4 relative overflow-hidden font-sans rounded-2xl mt-10 ">
+    <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-30 max-sm:p-1 relative overflow-hidden font-sans rounded-2xl mt-10 ">
       {/* Background Decorative Gradients */}
       <div className="absolute top-1/4 -left-20 w-96 h-96 bg-indigo-600/30 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-purple-600/30 rounded-full blur-3xl pointer-events-none" />
@@ -130,6 +139,7 @@ return (
     <input
       type="file"
       name="image"
+      required
       accept="image/*"
       className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-2.5 pl-11 pr-4 text-slate-200 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer focus:outline-none focus:border-indigo-500 transition-colors"
     />
@@ -187,6 +197,11 @@ return (
             <ArrowRight className="h-4 w-4" />
           </button>
         </form>
+
+        {firebaseError && 
+        <h1 className='text-red-700 font-bold mt-4'>{firebaseError}
+        </h1>
+        }
 
         {/* Divider */}
         <div className="relative my-6">

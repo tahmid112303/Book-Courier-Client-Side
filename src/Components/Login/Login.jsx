@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useRef, useState } from 'react';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../../Hooks/useAuth';
@@ -6,9 +6,10 @@ import Swal from 'sweetalert2';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const {signIn,googleSignUp} = useAuth();
+    const {signIn,googleSignUp,changePassword} = useAuth();
     const navigate = useNavigate()
     const location = useLocation()
+    const emailRef = useRef()
     const [error,setError] = useState('')
 
     console.log(location)
@@ -52,6 +53,17 @@ const Login = () => {
         })
     }
 
+    const handleForgotPassword = () => {
+      const email = emailRef.current.value
+
+      changePassword(email)
+      .then(()=>{
+          Swal.fire("Password reset link has been sent to your email. Please check your inbox and follow the instructions to reset your password.");
+      }).catch(error=>{
+        console.log(error)
+      })
+    }
+
   return (
         <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-30 max-sm:p-1 relative overflow-hidden font-sans rounded-2xl mt-10">
       {/* Background Decorative Gradients */}
@@ -80,6 +92,7 @@ const Login = () => {
               <input
                 type="email"
                 name='email'
+                ref={emailRef}
                 placeholder="name@example.com"
                 className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-3 pl-11 pr-4 text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
               />
@@ -121,6 +134,10 @@ const Login = () => {
 
         {/* error text */}
         {error && <p className='text-red-700 font-bold mt-4'>Invalid credentials</p>}
+
+        <div className='mt-4 flex justify-center'>
+            <a onClick={handleForgotPassword} className='link link-hover text-white'>Forgotten Password?</a>
+        </div>
 
         {/* Divider */}
         <div className="relative my-6">
