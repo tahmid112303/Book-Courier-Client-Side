@@ -63,7 +63,7 @@ const Register = () => {
             .then(res => {
               if(res.data.insertedId){
                   console.log("Account created in the database")
-                  Swal.fire("Account created successfully!");
+                  Swal.fire("Account created successfully! Please Sign In");
                   navigate('/login')
                   logOut()
                   .then(()=>{
@@ -115,7 +115,7 @@ return (
           {/* Full Name Input */}
           <div>
             <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-              Full Name
+              Full Name <span className='text-red-700 text-xl'>*</span>
             </label>
             <div className="relative">
               <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
@@ -132,7 +132,7 @@ return (
 {/* Image File Input */}
 <div>
   <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-    Profile Photo (Optional)
+    Profile Photo <span className='text-red-700 text-xl'>*</span>
   </label>
   <div className="relative">
     <Image className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
@@ -149,7 +149,7 @@ return (
           {/* Email Input */}
           <div>
             <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-              Email Address
+              Email Address <span className='text-red-700 text-xl'>*</span>
             </label>
             <div className="relative">
               <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
@@ -166,7 +166,7 @@ return (
           {/* Password Input */}
           <div>
             <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-              Password
+              Password <span className='text-red-700 text-xl'>*</span>
             </label>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />

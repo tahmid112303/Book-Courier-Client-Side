@@ -13,6 +13,8 @@ import DashboardHome from "./Dashboard/DashboardHome";
 import AddBook from "./Dashboard/AddBook";
 import MyBooks from "./Dashboard/MyBooks";
 import EditBook from "./Dashboard/EditBook";
+import BookDetail from "./BookDetail/BookDetail";
+import EditProfile from "./EditProfile/EditProfile";
 
 export const router = createBrowserRouter([
   {
@@ -37,8 +39,19 @@ export const router = createBrowserRouter([
          Component: Login
       },
       { 
-         path: 'profile',
-         Component: <PrivateRoute><Profile></Profile></PrivateRoute>
+         path: 'bookDetail/:id',
+         loader: ({params}) => fetch(`http://localhost:9000/books/${params.id}`),
+         element: <PrivateRoute><BookDetail></BookDetail></PrivateRoute>
+      },
+      { 
+         path: 'editProfile/:id',
+         loader: ({params}) => fetch(`http://localhost:9000/users/${params.id}`),
+         element: <PrivateRoute><EditProfile></EditProfile></PrivateRoute>
+      },
+      { 
+         path: 'profile/:email',
+         loader: ({params}) => fetch(`http://localhost:9000/users/email/${params.email}`),
+         element: <PrivateRoute><Profile></Profile></PrivateRoute>
       },
       {
          path: 'coverage',

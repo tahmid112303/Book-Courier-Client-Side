@@ -88,9 +88,9 @@ const MyBooks = () => {
   </div>)}
   </div>
 
-        <div className='flex justify-center font-bold mt-6 max-sm:justify-start max-sm:ml-10'>
+      {myBooks.length > 0 && <div className='flex justify-center font-bold mt-6 max-sm:justify-start max-sm:ml-10'>
             <button onClick={()=>navigate('/dashboard/addbook')} className='btn btn-warning text-white rounded-3xl'>Add More</button>
-        </div>
+        </div>}
 </div>
   )
 }

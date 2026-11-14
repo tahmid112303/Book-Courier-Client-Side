@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 import useAxios from '../../Axios/useAxios'
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router'
 
 const Books = () => {
+  const navigate = useNavigate()
 
   const axios = useAxios()
   const {data: books = []} = useQuery({
@@ -34,7 +36,7 @@ const Books = () => {
             <p>Category: <span className='font-bold'>{book.bookCategory}</span></p>
         </div>
     <div className="card-actions w-full mt-10">
-      <button className="btn btn-primary w-full">Details</button>
+      <button onClick={()=>navigate(`/bookDetail/${book._id}`)} className="btn btn-primary w-full">Details</button>
     </div>
   </div>
   </div>
@@ -45,4 +47,4 @@ const Books = () => {
   )
 }
 
-export default Books
+export default memo(Books)

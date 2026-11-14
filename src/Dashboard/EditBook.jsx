@@ -61,7 +61,7 @@ const data = useLoaderData();
                   updateBookInDatabase(res.data.data.url);
               })
               .catch(err => {
-                  console.error("Image upload failed:", err);
+                  console.log("Image upload failed:", err);
               });
       } else {
           // If no new image is selected, retain the existing image URL from loader data

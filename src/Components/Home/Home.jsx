@@ -2,10 +2,12 @@ import React from 'react'
 import useAxios from '../../Axios/useAxios'
 import { useQuery } from '@tanstack/react-query'
 import Banner from '../Banner/Banner'
+import { useNavigate } from 'react-router'
 
 const Home = () => {
 
-    const axios = useAxios()
+    const axios = useAxios();
+    const navigate = useNavigate();
     const {data: books = []} = useQuery({
       queryKey: ['users','home'],
       queryFn: async () => {
@@ -38,7 +40,7 @@ const Home = () => {
             <p>Category: <span className='font-bold'>{book.bookCategory}</span></p>
         </div>
     <div className="card-actions w-full mt-10">
-      <button className="btn btn-primary w-full">Details</button>
+      <button onClick={()=>navigate(`/bookDetail/${book._id}`)} className="btn btn-primary w-full">Details</button>
     </div>
   </div>
   </div>
