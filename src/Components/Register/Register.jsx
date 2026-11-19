@@ -19,14 +19,37 @@ const Register = () => {
       googleSignUp()
       .then(result => {
         console.log(result.user)
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Signed in successfully!",
-                showConfirmButton: false,
-                timer: 3000
+
+        const name = result.user.displayName;
+        const email = result.user.email;
+        const photo = result.user.photoURL;
+
+        const userInfo = {name,email,photo}
+
+        axiosSecure.post('/users', userInfo)
+        .then(res => {
+          console.log(res.data)
+          if(res.data.insertedId || !res.data.insertedId){
+              Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Signed in successfully!",
+              showConfirmButton: false,
+              timer: 3000
             });
           navigate('/');
+          }
+        }).catch(err => {
+          console.log(err)
+              Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Signed in successfully!",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          navigate('/');
+        })          
       }).catch(err => {
         console.log(err)
         setFirebaseError(err.message)

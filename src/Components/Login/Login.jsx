@@ -3,33 +3,59 @@ import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../../Hooks/useAuth';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../Axios/useAxiosSecure';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const {signIn,googleSignUp,changePassword} = useAuth();
-    const navigate = useNavigate()
-    const location = useLocation()
-    const emailRef = useRef()
-    const [error,setError] = useState('')
+    const navigate = useNavigate();
+    const location = useLocation();
+    const emailRef = useRef();
+    const [error,setError] = useState('');
+    const axiosSecure = useAxiosSecure()
 
     console.log(location)
 
-        const handleGoogleSignUp = () => {
-          googleSignUp()
-          .then(result => {
-            console.log(result.user)
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Signed in successfully!",
-                    showConfirmButton: false,
-                    timer: 3000
-                });
-              navigate(location.state || '/');
-          }).catch(err => {
-            console.log(err)
-          })
-        }
+    const handleGoogleSignUp = () => {
+      googleSignUp()
+      .then(result => {
+        console.log(result.user)
+
+        const name = result.user.displayName;
+        const email = result.user.email;
+        const photo = result.user.photoURL;
+
+        const userInfo = {name,email,photo}
+
+        axiosSecure.post('/users', userInfo)
+        .then(res => {
+          console.log(res.data)
+          if(res.data.insertedId || !res.data.insertedId){
+              Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Signed in successfully!",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          navigate('/');
+          }
+        }).catch(err => {
+          console.log(err)
+          Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Signed in successfully!",
+              showConfirmButton: false,
+              timer: 3000
+          });
+          navigate('/');
+        })         
+      }).catch(err => {
+        console.log(err)
+        setError(err.message)
+      })
+    }
 
     const handleLogin = e => {
         e.preventDefault()
@@ -85,7 +111,7 @@ const Login = () => {
           {/* Email Input */}
           <div>
             <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-              Email Address
+              Email Address <span className='text-red-700 text-xl'>*</span>
             </label>
             <div className="relative">
               <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
@@ -102,7 +128,7 @@ const Login = () => {
           {/* Password Input */}
           <div>
             <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-              Password
+              Password <span className='text-red-700 text-xl'>*</span>
             </label>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />

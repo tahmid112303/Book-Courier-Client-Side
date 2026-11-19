@@ -2,7 +2,7 @@ import React from 'react'
 import useAxios from '../../Axios/useAxios'
 import { useQuery } from '@tanstack/react-query'
 import Banner from '../Banner/Banner'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 const Home = () => {
 
@@ -25,7 +25,7 @@ const Home = () => {
         <h1 className='text-center font-bold text-5xl my-6'>Trending Books</h1>
         
         <div className='grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6 w-fit mx-auto'>
-            {books.map(book => <div key={book._id} className="card bg-[#b1ece9] text-black w-96 max-sm:w-80 h-auto shadow-sm">
+            {books.filter(book => book.status !== 'unpublished').map(book => <div key={book._id} className="card bg-[#b1ece9] text-black w-96 max-sm:w-80 h-auto shadow-sm">
   <figure className="px-10 pt-10">
     <img
       src={book.bookImage}
@@ -48,9 +48,9 @@ const Home = () => {
 
     </div>
 
-        {/* <div className='flex justify-center items-center font-bold text-2xl text-green-500 border-2 border-amber-300 w-full'>
-      <Link>View All Books</Link>
-    </div> */}
+    <div className='flex justify-center items-center font-bold text-2xl text-green-500 w-full mt-10 underline max-sm:justify-start max-sm:ml-10'>
+      <Link to='/books'>View All Books</Link>
+    </div>
 
     </div>
   )

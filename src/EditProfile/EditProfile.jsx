@@ -1,9 +1,15 @@
 import axios from 'axios'
 import React from 'react'
-import { useLoaderData } from 'react-router'
+import { useLoaderData, useNavigate } from 'react-router'
+import useAxiosSecure from '../Axios/useAxiosSecure'
+import Swal from 'sweetalert2'
+import { updateProfile } from 'firebase/auth'
+import { auth } from '../Firebase_Auth/Firebase.init'
 
 const EditProfile = () => {
   const profileData = useLoaderData()
+  const axiosSecure = useAxiosSecure()
+  const navigate = useNavigate()
   console.log(profileData)
 
   const handleEditProfile = (e) => {
@@ -17,7 +23,31 @@ const EditProfile = () => {
         photo: imageURL
       }
 
-      console.log(profileInfo)
+      axiosSecure.patch(`/users/${profileData._id}`,profileInfo)
+      .then(res => {
+        if(res.data.modifiedCount){
+              Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your Profile has been updated",
+              showConfirmButton: false,
+              timer: 1500
+        });
+
+        updateProfile(auth.currentUser, {
+          displayName: profileInfo.name,
+          photoURL: profileInfo.photo
+        }).then(() => {
+          console.log("Profile Updated")
+        }).catch(err => {
+          console.log(err)
+        })
+
+        navigate(`/profile/${profileData.email}`)
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     }
 
     if(photo){

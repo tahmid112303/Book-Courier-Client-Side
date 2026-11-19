@@ -2,7 +2,7 @@ import { Link, NavLink, useNavigate } from 'react-router'
 import Logo from '../Logo/Logo'
 import useAuth from '../../Hooks/useAuth'
 import Swal from 'sweetalert2'
-import { LogOut } from 'lucide-react'
+import { LogOut, User } from 'lucide-react'
 
 const NavBar = () => {
 
@@ -79,13 +79,15 @@ const NavBar = () => {
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
         <li>
           <Link to={`/profile/${user?.email}`} className="justify-between">
-            Profile
+            <span className='text-xl'>Profile</span> 
+            <User></User>
           </Link>
         </li>
         <li onClick={handleLogOut}>
-            <a>
-              <span>Log Out</span> <LogOut></LogOut>
-            </a>
+            <Link className='justify-between'>
+              <span className='text-xl'>Log Out</span> 
+              <LogOut></LogOut>
+            </Link>
         </li>
       </ul>
     </div> : <button onClick={() => navigate('/login')} className="btn btn-primary rounded-2xl">Sign In</button> }

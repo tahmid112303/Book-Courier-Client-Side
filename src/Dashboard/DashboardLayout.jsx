@@ -1,8 +1,8 @@
 import React from 'react'
 import Footer from '../Components/Footer/Footer'
-import { Link, Outlet, useNavigate } from 'react-router'
+import { Outlet, useNavigate } from 'react-router'
 import logo from '../assets/logo.jpg'
-import { BookCopy, BookUp, House } from 'lucide-react'
+import { BookCopy, BookUp, House, LibraryBig, User } from 'lucide-react'
 
 const DashboardLayout = () => {
     const navigate = useNavigate()
@@ -68,6 +68,22 @@ const DashboardLayout = () => {
             {/* Home icon */}
             <BookCopy></BookCopy>
             <span className="is-drawer-close:hidden">My Books</span>
+          </button>
+        </li>
+
+        <li>
+          <button onClick={()=>navigate('/dashboard/allbooks')} className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center is-drawer-open:justify-start" data-tip="All Books">
+            {/* Home icon */}
+            <LibraryBig></LibraryBig>
+            <span className="is-drawer-close:hidden">All Books</span>
+          </button>
+        </li>
+        
+        <li>
+          <button onClick={()=>navigate('/dashboard/usersManagement')} className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center is-drawer-open:justify-start" data-tip="Users Management">
+            {/* Home icon */}
+            <User></User>
+            <span className="is-drawer-close:hidden">Users Management</span>
           </button>
         </li>
 

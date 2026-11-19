@@ -10,7 +10,7 @@ const MyBooks = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const {user} = useAuth();
-  const {data: myBooks = [], refetch} = useQuery({
+  const {data: myBooks = [],refetch} = useQuery({
     queryKey: ['books',user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/books?email=${user.email}`);
@@ -19,33 +19,32 @@ const MyBooks = () => {
     }
   })
 
-  const handleDeleteBook = (id) => {
-        Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-  }).then((result) => {
-        if (result.isConfirmed)
-      axiosSecure.delete(`/books/${id}`)
-      .then(res=>{
-        console.log(res.data)
-        if(res.data.deletedCount){
-          Swal.fire({
-          title: "Deleted!",
-          text: "Book has been deleted.",
-          icon: "success"
-      });
-          refetch()
-      }
-      })
-          
-});
+  const handleUnpublishBook = (id) => {
+    axiosSecure.patch(`/books/${id}/unpublish`)
+    .then(res => {
+        if(res.data.modifiedCount){
+            Swal.fire("Book has been unpublished successfully")
+            refetch()
+        }
+    })
+  } 
 
+  const handlePublishBook = (id) => {
+    axiosSecure.patch(`/books/${id}/publish`)
+    .then(res => {
+        if(res.data.modifiedCount){
+            Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Book has been published successfully!",
+            showConfirmButton: false,
+            timer: 2000
+    });
+            refetch()
+        }
+    })
   }
+
   
   return (
       <div>
@@ -68,20 +67,21 @@ const MyBooks = () => {
             <p>Category: <span className='font-bold'>{book.bookCategory}</span></p>
         </div>
     <div className="card-actions w-full mt-10">
-      <button className="btn btn-primary w-full">Details</button>
+      <button onClick={()=>navigate(`/bookDetail/${book._id}`)} className="btn btn-primary w-full">Details</button>
 
-<div className='grid grid-cols-3 gap-4 w-fit mx-auto mt-4'>
-    <button className='btn btn-primary'>
+<div className='card-actions w-full'>
+
+    {book.status === "unpublished" ? <button onClick={()=>handlePublishBook(book._id)} className='btn btn-neutral w-full'>
+        Publish
+    </button> : <button onClick={()=>handleUnpublishBook(book._id)} className='btn btn-success w-full text-white'>
         Unpublish
-    </button>
+    </button>}
 
-    <button onClick={()=>navigate(`/dashboard/editbook/${book._id}`)} className='btn btn-primary'>
+
+    <button onClick={()=>navigate(`/dashboard/editbook/${book._id}`)} className='btn btn-primary w-full'>
         Edit
     </button>
     
-    <button onClick={()=>handleDeleteBook(book._id)} className='btn btn-primary'>
-        Delete
-    </button>
 </div>
     </div>
   </div>

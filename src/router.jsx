@@ -15,6 +15,8 @@ import MyBooks from "./Dashboard/MyBooks";
 import EditBook from "./Dashboard/EditBook";
 import BookDetail from "./BookDetail/BookDetail";
 import EditProfile from "./EditProfile/EditProfile";
+import UsersManagement from "./Dashboard/UsersManagement";
+import AllBooks from "./Dashboard/AllBooks";
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +79,14 @@ export const router = createBrowserRouter([
          {
             path: 'mybooks',
             Component: MyBooks
+         },
+         {
+            path: 'allbooks',
+            Component: AllBooks
+         },
+         {
+            path: 'usersManagement',
+            Component: UsersManagement
          },
          {
             path: 'editbook/:id',
