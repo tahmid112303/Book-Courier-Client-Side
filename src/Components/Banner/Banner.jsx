@@ -2,51 +2,22 @@ import React from 'react'
 import image1 from '../../assets/Image1.jpg'
 import image2 from '../../assets/Image2.png'
 import image3 from '../../assets/Image3.png'
+import { Carousel } from 'react-responsive-carousel'
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const Banner = () => {
   return (
- <div className="carousel my-6 rounded-3xl">
-  <div id="slide1" className="carousel-item relative w-full">
-    <img
-      alt="Tailwind CSS slide example"
-      src={image1}
-      className="w-full" />
-    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-      <a href="#slide4" className="btn btn-circle">❮</a>
-      <a href="#slide2" className="btn btn-circle">❯</a>
-    </div>
-  </div>
-  <div id="slide2" className="carousel-item relative w-full">
-    <img
-      alt="Tailwind CSS slide example"
-      src={image2}
-      className="w-full" />
-    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-      <a href="#slide1" className="btn btn-circle">❮</a>
-      <a href="#slide3" className="btn btn-circle">❯</a>
-    </div>
-  </div>
-  <div id="slide3" className="carousel-item relative w-full">
-    <img
-      alt="Tailwind CSS slide example"
-      src={image3}
-      className="w-full" />
-    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-      <a href="#slide2" className="btn btn-circle">❮</a>
-      <a href="#slide4" className="btn btn-circle">❯</a>
-    </div>
-  </div>
-  <div id="slide4" className="carousel-item relative w-full">
-    <img
-      alt="Tailwind CSS slide example"
-      src={image1}
-      className="w-full" />
-    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-      <a href="#slide3" className="btn btn-circle">❮</a>
-      <a href="#slide1" className="btn btn-circle">❯</a>
-    </div>
-  </div>
-</div>
+      <Carousel autoPlay={true} infiniteLoop={true} interval={2000} className='mt-8'>  
+                <div className='rounded-2xl'>
+                    <img className='rounded-2xl' src={image1} />
+                </div>
+                <div className='rounded-2xl'>
+                    <img className='rounded-2xl' src={image2} />
+                </div>
+                <div className='rounded-2xl'>
+                    <img className='rounded-2xl' src={image3} />
+                </div>
+            </Carousel>
   )
 }
 

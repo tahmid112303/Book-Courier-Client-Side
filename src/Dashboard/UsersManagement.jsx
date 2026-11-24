@@ -1,18 +1,87 @@
 import { useQuery } from '@tanstack/react-query'
-import { BookCheck, Shield, Trash } from 'lucide-react'
+import { BookCheck, Shield, ShieldOff, Trash } from 'lucide-react'
 import React from 'react'
 import useAxiosSecure from '../Axios/useAxiosSecure'
+import Swal from 'sweetalert2'
+import { TbAddressBookOff } from 'react-icons/tb'
 
 const UsersManagement = () => {
     const axiosSecure = useAxiosSecure()
 
-    const { data: users = []} = useQuery({
+    const { data: users = [], refetch} = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
             const res = await axiosSecure.get('/users');
             return res.data;
         }
     })
+
+    const handleMakeAdmin = (user) => {
+        const roleInfo = {role: 'admin'}
+        axiosSecure.patch(`/users/${user._id}/role`,roleInfo)
+        .then(res => {
+          if(res.data.modifiedCount){
+            Swal.fire(`${user.name} marked as admin`)
+            refetch()
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+    }
+
+    const handleRemoveAdmin = (user) => {
+      Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, remove!"
+}).then((result) => {
+    if(result.isConfirmed){
+      const roleInfo = {role: 'user'}
+      axiosSecure.patch(`/users/${user._id}/role`,roleInfo)
+      .then(res => {
+        if(res.data.modifiedCount){
+            Swal.fire({
+            title: "Removed from Admin",
+            text: "Admin has been removed.",
+            icon: "success"
+          });
+          refetch();
+        }
+      }).catch(err => {
+          console.log(err)
+      })
+    }
+  }) 
+  
+
+};
+
+
+    const handleMakeLibrarian = (user) => {
+      const roleInfo = {role: 'librarian'}
+      axiosSecure.patch(`/users/${user._id}/role`, roleInfo)
+      .then(res => {
+        if(res.data.modifiedCount){
+          Swal.fire(`${user.name} marked as Librarian`);
+          refetch()
+        }
+      })
+    }
+
+    const handleRemoveLibrarian = (user) => {
+      const roleInfo = {role: 'user'}
+      axiosSecure.patch(`/users/${user._id}/role`,roleInfo)
+      .then(res => {
+        if(res.data.modifiedCount){
+          Swal.fire(`${user.name} removed as Librarian`);
+          refetch();
+        }
+      })
+    }
 
   return (
     <>
@@ -28,7 +97,8 @@ const UsersManagement = () => {
         <th>Name</th>
         <th>Role</th>
         <th>Email</th>
-        <th>Actions</th>
+        <th>Make Admin</th>
+        <th>Make Librarian</th>
       </tr>
     </thead>
 
@@ -54,16 +124,23 @@ const UsersManagement = () => {
             {user.role}
         </td>
         <td>{user.email}</td>
-        <th className='flex gap-2'>
-          <button title='Make Admin' className="btn btn-square">
+        <td>
+          {user.role === 'admin' ? <button onClick={()=>handleRemoveAdmin(user)} title='Remove Admin' className="btn btn-square ml-5 hover:bg-green-300">
+                <ShieldOff></ShieldOff>
+          </button> : <button onClick={()=>handleMakeAdmin(user)} title='Make Admin' className="btn btn-square ml-5 hover:bg-green-300">
                 <Shield></Shield>
-          </button>
+          </button>}
 
-          <button title='Make Librarian' className="btn btn-square">
+        </td>
+        <td>
+          {
+          user.role === 'librarian' ? <button onClick={()=>handleRemoveLibrarian(user)} title='Remove Librarian' className="btn btn-square ml-5 hover:bg-green-300">
+                <TbAddressBookOff className='text-2xl'></TbAddressBookOff>
+          </button> : <button onClick={()=>handleMakeLibrarian(user)} title='Make Librarian' className="btn btn-square ml-5 hover:bg-green-300">
                 <BookCheck></BookCheck>
           </button>
-
-        </th>
+          }
+        </td>
       </tr>)}
     </tbody>
 

@@ -10,7 +10,7 @@ const AllBooks = () => {
     const {data: books = [], refetch} = useQuery({
         queryKey: ['books'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/books');
+            const res = await axiosSecure.get('/books/admin');
             return res.data;
         }
     })

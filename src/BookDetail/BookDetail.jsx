@@ -1,15 +1,63 @@
 import React from 'react'
 import { useLoaderData, useNavigate } from 'react-router';
+import useAxiosSecure from '../Axios/useAxiosSecure';
+import useAuth from '../Hooks/useAuth';
+import Swal from 'sweetalert2';
 
 const BookDetail = () => {
     const bookData = useLoaderData();
     const navigate = useNavigate();
+    const axiosSecure = useAxiosSecure();
+    const {user} = useAuth()
 
     const formattedDate = new Date(bookData.publishedAt).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   });
+
+  const handleOrderBook = () => {
+        Swal.fire({
+        title: "Are you sure?",
+        text: `You will be charged $${bookData.bookPrice}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes"
+    }).then((result) => {
+      if(result.isConfirmed){
+      const orderData = {
+        bookId: bookData._id,
+        customerName: user.displayName,
+        customerEmail: user.email,
+        book: bookData.bookName,
+        author: bookData.authorName,
+        price: bookData.bookPrice
+    }
+    axiosSecure.post('/orders', orderData)
+    .then(res => {
+        if(res.data.insertedId){
+          Swal.fire({
+            title: "Ordered!",
+            text: "Your order has been placed!",
+            icon: "success"
+  });
+        }else{
+            Swal.fire({
+            icon: "error",
+            text: "You already ordered it! Please pay first.",
+});
+        }
+    })
+    .catch(err => {
+      console.log(err)
+
+    })
+  } 
+});
+
+  }
 
 
   return (
@@ -58,8 +106,8 @@ const BookDetail = () => {
 
             {/* Order Button */}
             <div className="mt-5">
-              <button
-                className="cursor-pointer w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-4 rounded-xl transition duration-200 shadow-md hover:shadow-lg text-sm"
+              <button onClick={handleOrderBook}
+                className="btn cursor-pointer w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-4 rounded-xl transition duration-200 shadow-md hover:shadow-lg text-sm"
               >
                 Order
               </button>

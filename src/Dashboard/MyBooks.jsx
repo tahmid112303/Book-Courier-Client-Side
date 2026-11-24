@@ -48,7 +48,7 @@ const MyBooks = () => {
   
   return (
       <div>
-          <h1 className='text-center text-5xl font-bold mt-2'>All of My Books</h1>
+          <h1 className='text-center text-5xl font-bold mt-2 max-sm:text-2xl'>All of My Books: {myBooks.length}</h1>
 
           <div className='grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-10 w-fit mx-auto mt-10'>
 

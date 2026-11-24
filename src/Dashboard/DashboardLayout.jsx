@@ -2,10 +2,12 @@ import React from 'react'
 import Footer from '../Components/Footer/Footer'
 import { Outlet, useNavigate } from 'react-router'
 import logo from '../assets/logo.jpg'
-import { BookCopy, BookUp, House, LibraryBig, User } from 'lucide-react'
+import { BookCopy, BookUp, House, LibraryBig, ShoppingCartPlus, User } from 'lucide-react'
+import useRole from '../Hooks/useRole'
 
 const DashboardLayout = () => {
     const navigate = useNavigate()
+    const {role} = useRole() 
 
   return (
     <>
@@ -50,42 +52,50 @@ const DashboardLayout = () => {
           <button onClick={()=>navigate('/dashboard')} className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center is-drawer-open:justify-start" data-tip="Homepage">
             {/* Home icon */}
             <House></House>
-
             <span className="is-drawer-close:hidden">Homepage</span>
           </button>
         </li>
 
         <li>
+          <button onClick={()=>navigate('/dashboard/myOrders')} className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center is-drawer-open:justify-start" data-tip="My Orders">
+            {/* Home icon */}
+            <ShoppingCartPlus></ShoppingCartPlus>
+            <span className="is-drawer-close:hidden">My Orders</span>
+          </button>
+        </li>
+
+        {role !== 'user' && <li>
           <button onClick={()=>navigate('/dashboard/addbook')} className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center is-drawer-open:justify-start" data-tip="Add Book">
             {/* Home icon */}
             <BookUp></BookUp>
             <span className="is-drawer-close:hidden">Add Book</span>
           </button>
-        </li>
+        </li>}
 
-        <li>
+        {role !== 'user' && <li>
           <button onClick={()=>navigate('/dashboard/mybooks')} className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center is-drawer-open:justify-start" data-tip="My Books">
             {/* Home icon */}
             <BookCopy></BookCopy>
             <span className="is-drawer-close:hidden">My Books</span>
           </button>
-        </li>
+        </li>}
 
-        <li>
+        {role === "admin" && <li>
           <button onClick={()=>navigate('/dashboard/allbooks')} className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center is-drawer-open:justify-start" data-tip="All Books">
             {/* Home icon */}
             <LibraryBig></LibraryBig>
             <span className="is-drawer-close:hidden">All Books</span>
           </button>
         </li>
+        }
         
-        <li>
+        {role === "admin" && <li>
           <button onClick={()=>navigate('/dashboard/usersManagement')} className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center is-drawer-open:justify-start" data-tip="Users Management">
             {/* Home icon */}
             <User></User>
             <span className="is-drawer-close:hidden">Users Management</span>
           </button>
-        </li>
+        </li>}
 
 
       </ul>

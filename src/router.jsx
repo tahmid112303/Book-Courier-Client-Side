@@ -5,7 +5,7 @@ import Books from "./Components/Books/Books";
 import Coverage from "./Components/Coverage/Coverage";
 import Register from "./Components/Register/Register";
 import Login from "./Components/Login/Login";
-import PrivateRoute from "./Private_Routes/PrivateRoute";
+import PrivateRoute from "./Secret_Routes/PrivateRoute";
 import Profile from "./Components/Profile/Profile";
 import About from "./Components/About/About";
 import DashboardLayout from "./Dashboard/DashboardLayout";
@@ -17,6 +17,9 @@ import BookDetail from "./BookDetail/BookDetail";
 import EditProfile from "./EditProfile/EditProfile";
 import UsersManagement from "./Dashboard/UsersManagement";
 import AllBooks from "./Dashboard/AllBooks";
+import AdminRoute from "./Secret_Routes/AdminRoute";
+import LibrarianRoute from "./Secret_Routes/LibrarianRoute";
+import MyOrders from "./Dashboard/MyOrders";
 
 export const router = createBrowserRouter([
   {
@@ -72,27 +75,37 @@ export const router = createBrowserRouter([
             index: true,
             Component: DashboardHome
          },
+         //User Routes
+         {
+            path: 'myOrders',
+            Component: MyOrders
+         },
+
+         //Librarian Routes
          {
             path: 'addbook',
-            Component: AddBook
+            element: <LibrarianRoute><AddBook></AddBook></LibrarianRoute>
          },
          {
             path: 'mybooks',
-            Component: MyBooks
-         },
-         {
-            path: 'allbooks',
-            Component: AllBooks
-         },
-         {
-            path: 'usersManagement',
-            Component: UsersManagement
+            element: <LibrarianRoute><MyBooks></MyBooks></LibrarianRoute>
          },
          {
             path: 'editbook/:id',
             loader: ({params}) => fetch(`http://localhost:9000/books/${params.id}`),
-            Component: EditBook
+            element: <LibrarianRoute><EditBook></EditBook></LibrarianRoute> 
          },
+
+         //Admin Routes
+         {
+            path: 'allbooks',
+            element: <AdminRoute><AllBooks></AllBooks></AdminRoute>
+         },
+         {
+            path: 'usersManagement',
+            element: <AdminRoute><UsersManagement></UsersManagement></AdminRoute>
+         },
+
       ]
   }
 ]);
