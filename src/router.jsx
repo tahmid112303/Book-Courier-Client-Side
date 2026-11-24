@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router";
 import Root from "./Components/Root";
 import Home from "./Components/Home/Home";
 import Books from "./Components/Books/Books";
-import Coverage from "./Components/Coverage/Coverage";
 import Register from "./Components/Register/Register";
 import Login from "./Components/Login/Login";
 import PrivateRoute from "./Secret_Routes/PrivateRoute";
@@ -58,11 +57,6 @@ export const router = createBrowserRouter([
          loader: ({params}) => fetch(`http://localhost:9000/users/email/${params.email}`),
          element: <PrivateRoute><Profile></Profile></PrivateRoute>
       },
-      {
-         path: 'coverage',
-         Component: Coverage,
-         loader: () => fetch('/ServiceCenters.json')
-      }
     ],
   },
 

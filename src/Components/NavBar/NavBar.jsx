@@ -16,7 +16,7 @@ const NavBar = () => {
 
       <NavLink to='/about'>About Us</NavLink>
 
-      <NavLink className='max-sm:hidden' to='/coverage'>Coverage Areas</NavLink>
+      <NavLink>Contact Us</NavLink>
 
       <NavLink to='/dashboard'>Dashboard</NavLink>
 
